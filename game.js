@@ -1,5 +1,5 @@
 //initialize Phaser
-var game = new Phaser.Game(800, 500, Phaser.AUTO, 'main');
+var game = new Phaser.Game(800, 500, Phaser.AUTO, 'game');
 
 var mainState = {
     // PHASER: called before starting game to load assets
