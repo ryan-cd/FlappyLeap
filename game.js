@@ -21,7 +21,7 @@ var mainState = {
         // setup physics
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.physics.arcade.enable(this.bird);
-        this.bird.body.gravity.y = 1000;
+        this.bird.body.gravity.y = 800;
         
         //controls
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -46,7 +46,7 @@ var mainState = {
     },
     
     jump: function() {
-        this.bird.body.velocity.y = -300;
+        this.bird.body.velocity.y = -350;
     },
     
     restart: function () {

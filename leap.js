@@ -5,6 +5,7 @@ function concatData(id, data) {
 
 var handString = "";
 var hand;
+var canJump = true;
 
 // Leap.loop uses browsers requestAnimationFrame
 var options = { enableGestures: true };
@@ -20,6 +21,7 @@ Leap.loop(options, function(frame) {
 		handString = concatData("hand_type", hand.type);
 		handString += concatData("confidence", hand.confidence);
         handString += concatData("palm position", hand.palmPosition);
+        tryJump(hand.palmPosition);
 		handString += concatData("pinch_strength", hand.pinchStrength);
 		handString += concatData("grab_strength", hand.grabStrength);
 		
@@ -29,3 +31,15 @@ Leap.loop(options, function(frame) {
 	
 	document.getElementById("leap").innerHTML = frameString;
 });
+
+function tryJump (palmPosition){
+    var palmY = palmPosition[1];
+    
+    if(palmY > 200 && canJump){
+        mainState.jump();
+        canJump = false;
+    }
+    
+    if(palmY < 100)
+        canJump = true;
+}
