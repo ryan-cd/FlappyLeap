@@ -21,7 +21,7 @@ var mainState = {
         // setup physics
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.physics.arcade.enable(this.bird);
-        this.bird.body.gravity.y = 800;
+        this.bird.body.gravity.y = 1000;
         
         //controls
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -46,7 +46,7 @@ var mainState = {
     },
     
     jump: function() {
-        this.bird.body.velocity.y = -350;
+        this.bird.body.velocity.y = -450;
     },
     
     restart: function () {
@@ -69,7 +69,7 @@ var mainState = {
         var gap = Math.floor(Math.random()*7)+1;
         
         for (var i = 0; i < 10; i++)
-            if (i != gap && i != gap +1) 
+            if (i != gap -1 && i != gap && i != gap +1) 
                 this.addBlock(800, i*50);  
     },
 };
