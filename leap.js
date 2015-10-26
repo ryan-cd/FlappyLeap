@@ -2,7 +2,6 @@ function concatData(id, data) {
 	return id + ": " + data + "<br>";
 }
 
-
 var handString = "";
 var hand;
 var canJump = true;
