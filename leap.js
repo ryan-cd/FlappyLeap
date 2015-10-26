@@ -31,14 +31,23 @@ Leap.loop(options, function(frame) {
 	document.getElementById("leap").innerHTML = frameString;
 });
 
+function verify (color, message){
+    $("#position").css("back-ground","red").text("move up");
+};
+
 function tryJump (palmPosition){
     var palmY = palmPosition[1];
     
     if(palmY > 200 && canJump){
         mainState.jump();
         canJump = false;
+        verify("red", "Move hand down");
     }
-    
-    if(palmY < 100)
-        canJump = true;
+    if(100 < palmY < 200){
+        verify("yellow", "Move hand down to start");
+    }
+    if(palmY < 100){
+         canJump = true;
+        verify("green", "Move hand up");
+    }      
 }
