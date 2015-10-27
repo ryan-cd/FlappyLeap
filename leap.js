@@ -23,7 +23,6 @@ Leap.loop(options, function(frame) {
         tryJump(hand.palmPosition);
 		handString += concatData("pinch_strength", hand.pinchStrength);
 		handString += concatData("grab_strength", hand.grabStrength);
-		
 		handString += '<br>';
         frameString += handString;
 	}
@@ -35,8 +34,15 @@ function tryJump (palmPosition){
     var palmY = palmPosition[1];
     
     if(palmY > 200 && canJump){
-        mainState.jump();
-        canJump = false;
+        try {
+            if(game.state.getCurrentState() !== mainState)
+                game.state.start("Game");
+            mainState.jump();
+            canJump = false;
+        } 
+        catch(e) {
+            
+        }
     }
     
     if(palmY < 100)

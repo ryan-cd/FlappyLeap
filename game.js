@@ -133,7 +133,7 @@ var gameOver = function(game){}
  
 gameOver.prototype = {
   	create: function(){
-		this.labelScore = this.game.add.text(90, 200, "Game Over Score " + score, { font: "30px Arial", fill: "#000" });
+		this.labelScore = this.game.add.text(90, 200, "Game Over. Score: " + score, { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
 	},
