@@ -82,15 +82,38 @@ var mainState = {
         // If the bird is out of the world (too high or too low), call the 'restartGame' function
         if (this.bird.inWorld == false)
             this.restartGame(); 
-
         // If the bird overlap any pipes, call 'restartGame'
-        game.physics.arcade.overlap(this.bird, this.pipes, this.restartGame, null, this);      
+        game.physics.arcade.overlap(this.bird, this.pipes, this.collision, null, this);  
+        
+        if(this.bird.angle < 20)
+            this.bird.angle += 1.5;
     },
 
     // Make the bird jump 
     jump: function() {
+        if(!this.bird.alive)
+            return;
         // Add a vertical velocity to the bird
         this.bird.body.velocity.y = -450;
+        
+        this.bird.anchor.setTo(-0.2, 0.5);
+        game.add.tween(this.bird).to({angle: -24}, 100).start();
+    },
+    
+    collision: function() {
+        if(!this.bird.alive) 
+            return;
+        this.bird.alive = false;
+        
+        this.bird.body.velocity.y = -500;
+        this.bird.body.gravity.y = 2000;
+        
+        game.time.events.remove(this.timer);
+        
+        this.pipes.forEachAlive(function(p){
+            p.body.velocity.x = 0;
+        }, this);
+        
     },
 
     // Restart the game
@@ -115,12 +138,12 @@ var mainState = {
         pipe.outOfBoundsKill = true;
     },
 
-    // Add a row of 6 pipes with a hole somewhere in the middle
+    // Add a row of 6 pipes with a gap somewhere in the middle
     addRowOfPipes: function() {
-        var hole = Math.floor(Math.random()*5)+1;
+        var gap = Math.floor(Math.random()*7)+1;
         
         for (var i = 0; i < 10; i++)
-            if (i != hole -1 && i != hole && i != hole +1) 
+            if (i != gap -1 && i != gap && i != gap +1) 
                 this.addOnePipe(800, i*50);   
     
         score += 1;
