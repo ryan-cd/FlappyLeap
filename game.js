@@ -1,5 +1,4 @@
-// Initialize Phaser, and creates a 400x490px game
-var game = new Phaser.Game(400, 490, Phaser.AUTO, 'gameDiv');
+var game = new Phaser.Game(window.innerWidth, 500, Phaser.AUTO, 'gameDiv');
 var score = 0;
 var boot = function(game) {};
 boot.prototype = {
@@ -20,7 +19,7 @@ preload.prototype = {
         loadingBar.anchor.setTo(0.5,0.5);
         this.load.setPreloadSprite(loadingBar);
         // Change the background color of the game
-        game.stage.backgroundColor = '#fff';
+        game.stage.backgroundColor = '#AADDFF';
 
         // Load the bird sprite
         game.load.image('bird', 'assets/bird.png');  
@@ -39,7 +38,7 @@ var gameTitle = function(game){}
  
 gameTitle.prototype = {
   	create: function(){
-        this.labelScore = this.game.add.text(90, 200, "FlappyLeap", { font: "30px Arial", fill: "#000" });
+        this.labelScore = this.game.add.text(90, 200, "Flappy Leap!", { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
 	},
@@ -91,7 +90,7 @@ var mainState = {
     // Make the bird jump 
     jump: function() {
         // Add a vertical velocity to the bird
-        this.bird.body.velocity.y = -350;
+        this.bird.body.velocity.y = -450;
     },
 
     // Restart the game
@@ -109,7 +108,7 @@ var mainState = {
         pipe.reset(x, y);
 
         // Add velocity to the pipe to make it move left
-        pipe.body.velocity.x = -200; 
+        pipe.body.velocity.x = -370; 
                
         // Kill the pipe when it's no longer visible 
         pipe.checkWorldBounds = true;
@@ -120,9 +119,9 @@ var mainState = {
     addRowOfPipes: function() {
         var hole = Math.floor(Math.random()*5)+1;
         
-        for (var i = 0; i < 8; i++)
-            if (i != hole && i != hole +1) 
-                this.addOnePipe(400, i*60+10);   
+        for (var i = 0; i < 10; i++)
+            if (i != hole -1 && i != hole && i != hole +1) 
+                this.addOnePipe(800, i*50);   
     
         score += 1;
         this.labelScore.text = score;  
@@ -133,7 +132,7 @@ var gameOver = function(game){}
  
 gameOver.prototype = {
   	create: function(){
-		this.labelScore = this.game.add.text(90, 200, "Game Over. Score: " + score, { font: "30px Arial", fill: "#000" });
+		this.labelScore = this.game.add.text(90, 200, "Game Over!\n Score: " + score, { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
 	},
