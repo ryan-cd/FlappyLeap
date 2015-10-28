@@ -1,4 +1,23 @@
-var game = new Phaser.Game(window.innerWidth, 500, Phaser.AUTO, 'gameDiv');
+$(window).resize(function() { 
+    window.resizeGame(); 
+});
+
+function resizeGame() {
+    var height = $(window).height();
+    var width = $(window).width();
+
+    game.width = width;
+    //game.height = height;
+    game.stage.bounds.width = width;
+    //game.stage.bounds.height = height;
+
+    if (game.renderType === Phaser.WEBGL)
+    {
+        game.renderer.resize(width, 500);
+    }
+}
+
+var game = new Phaser.Game($(window).width(), 500, Phaser.AUTO, 'gameDiv');
 var score = 0;
 var boot = function(game) {};
 boot.prototype = {
@@ -18,27 +37,22 @@ preload.prototype = {
         var loadingBar = this.add.sprite(160,240,"loading");
         loadingBar.anchor.setTo(0.5,0.5);
         this.load.setPreloadSprite(loadingBar);
-        // Change the background color of the game
         game.stage.backgroundColor = '#AADDFF';
-
-        // Load the bird sprite
         game.load.image('bird', 'assets/bird.png');  
-
-        // Load the pipe sprite
         game.load.image('pipe', 'assets/pipe.png');
-        
     },
   	create: function(){
 		this.game.state.start("GameTitle");
 	}
 };
 
+
 //adds the game title
 var gameTitle = function(game){}
  
 gameTitle.prototype = {
   	create: function(){
-        this.labelScore = this.game.add.text(90, 200, "Flappy Leap!", { font: "30px Arial", fill: "#000" });
+        this.labelScore = this.game.add.text(90, 175, "Flappy Leap!\n [FLAP to FLY]", { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
 	},
@@ -47,7 +61,7 @@ gameTitle.prototype = {
 	}
 };
 
-// Creates a new 'main' state that will contain the game
+
 var mainState = {
     // Fuction called after 'preload' to setup the game 
     create: function() { 
@@ -67,7 +81,7 @@ var mainState = {
         // Create a group of 20 pipes
         this.pipes = game.add.group();
         this.pipes.enableBody = true;
-        this.pipes.createMultiple(20, 'pipe');  
+        this.pipes.createMultiple(100, 'pipe');  
 
         // Timer that calls 'addRowOfPipes' ever 1.5 seconds
         this.timer = this.game.time.events.loop(1500, this.addRowOfPipes, this);           
@@ -79,10 +93,10 @@ var mainState = {
 
     // This function is called 60 times per second
     update: function() {
-        // If the bird is out of the world (too high or too low), call the 'restartGame' function
+        // If the bird is out of the world (too high or too low), call the 'endGame' function
         if (this.bird.inWorld == false)
-            this.restartGame(); 
-        // If the bird overlap any pipes, call 'restartGame'
+            this.endGame(); 
+        // If the bird overlap any pipes, call 'endGame'
         game.physics.arcade.overlap(this.bird, this.pipes, this.collision, null, this);  
         
         if(this.bird.angle < 20)
@@ -116,12 +130,13 @@ var mainState = {
         
     },
 
-    // Restart the game
-    restartGame: function() {
-        // Start the 'main' state, which restarts the game
+    
+    //Game ends
+    endGame: function() {
         game.state.start('GameOver');
     },
 
+    
     // Add a pipe on the screen
     addOnePipe: function(x, y) {
         // Get the first dead pipe of our group
@@ -138,24 +153,28 @@ var mainState = {
         pipe.outOfBoundsKill = true;
     },
 
-    // Add a row of 6 pipes with a gap somewhere in the middle
+    
+    // Add a row of pipes with a gap somewhere in the middle
     addRowOfPipes: function() {
         var gap = Math.floor(Math.random()*7)+1;
         
         for (var i = 0; i < 10; i++)
             if (i != gap -1 && i != gap && i != gap +1) 
-                this.addOnePipe(800, i*50);   
+                this.addOnePipe($(window).width(), i*50);   
     
         score += 1;
         this.labelScore.text = score;  
     },
 };
 
+
 var gameOver = function(game){}
- 
 gameOver.prototype = {
   	create: function(){
-		this.labelScore = this.game.add.text(90, 200, "Game Over!\n Score: " + score, { font: "30px Arial", fill: "#000" });
+		this.labelScore = this.game.add.text(90, 175, 
+                                             "Game Over!\n Score: " 
+                                             + score 
+                                             + "\n[FLAP to FLY]", { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
 	},
