@@ -19,6 +19,7 @@ function resizeGame() {
 
 var game = new Phaser.Game($(window).width(), 500, Phaser.AUTO, 'gameDiv');
 var score = 0;
+var canScore = false;
 var boot = function(game) {};
 boot.prototype = {
 	preload: function(){
@@ -101,18 +102,30 @@ var mainState = {
         
         if(this.bird.angle < 20)
             this.bird.angle += 1.5;
+        
+        //TODO: Refactor this 
+        this.pipes.forEachAlive(function(p){
+            if(p.x + 50 < this.bird.body.x && canScore) {
+                score += 1;
+                canScore = false;
+            }
+        }, this);
+        
+        this.labelScore.text = score;  
+            
     },
 
+    
     // Make the bird jump 
     jump: function() {
         if(!this.bird.alive)
             return;
-        // Add a vertical velocity to the bird
         this.bird.body.velocity.y = -450;
         
         this.bird.anchor.setTo(-0.2, 0.5);
         game.add.tween(this.bird).to({angle: -24}, 100).start();
     },
+    
     
     collision: function() {
         if(!this.bird.alive) 
@@ -156,14 +169,12 @@ var mainState = {
     
     // Add a row of pipes with a gap somewhere in the middle
     addRowOfPipes: function() {
+        canScore = true;
         var gap = Math.floor(Math.random()*7)+1;
         
         for (var i = 0; i < 10; i++)
             if (i != gap -1 && i != gap && i != gap +1) 
                 this.addOnePipe($(window).width(), i*50);   
-    
-        score += 1;
-        this.labelScore.text = score;  
     },
 };
 

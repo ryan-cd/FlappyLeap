@@ -23,7 +23,7 @@ Leap.loop(options, function(frame) {
         tryJump(hand.palmPosition);
 		handString += concatData("pinch_strength", hand.pinchStrength);
 		handString += concatData("grab_strength", hand.grabStrength);
-		handString += '<br>';
+        handString += '<br>';
         frameString += handString;
 	}
 	
