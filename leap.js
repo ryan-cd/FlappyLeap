@@ -43,7 +43,7 @@ function tryJump (palmPosition){
         canJump = false;
         verify("red", "Move hand down");
     }
-    if(100 < palmY < 200){
+    if(100 < palmY && plamY < 200){
         verify("yellow", "Move hand down to start");
     }
     if(palmY < 100){
