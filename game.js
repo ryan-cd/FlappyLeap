@@ -68,13 +68,7 @@ var mainState = {
     create: function() { 
         // Set the physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        // Display the bird on the screen
-        this.bird = this.game.add.sprite(100, 245, 'bird');
         
-        // Add gravity to the bird to make it fall
-        game.physics.arcade.enable(this.bird);
-        this.bird.body.gravity.y = 1000; 
-
         // Call the 'jump' function when the spacekey is hit
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(this.jump, this); 
@@ -83,6 +77,13 @@ var mainState = {
         this.pipes = game.add.group();
         this.pipes.enableBody = true;
         this.pipes.createMultiple(100, 'pipe');  
+        
+        // Display the bird on the screen
+        this.bird = this.game.add.sprite(100, 245, 'bird');
+        
+        // Add gravity to the bird to make it fall
+        game.physics.arcade.enable(this.bird);
+        this.bird.body.gravity.y = 1000; 
 
         // Timer that calls 'addRowOfPipes' ever 1.5 seconds
         this.timer = this.game.time.events.loop(1500, this.addRowOfPipes, this);           
