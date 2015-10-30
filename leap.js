@@ -7,6 +7,8 @@ var hand;
 var canJump = true;
 var debug = false;
 var frameString = "";
+var maxHeight = 170;
+var minHeight = 100;
 // Leap.loop uses browsers requestAnimationFrame
 var options = { enableGestures: true };
 
@@ -31,10 +33,25 @@ Leap.loop(options, function(frame) {
             frameString += handString;
         }
         tryJump(hand.palmPosition);
+        indicator(hand.palmPosition[1]);
 	}
 	
 	document.getElementById("leap").innerHTML = frameString;
 });
+
+function indicator(height){
+    if(height > maxHeight || height < minHeight){
+        $("#position").css("background-color","yellow");
+        console.log("maxed out");
+    } else {
+        var range = maxHeight - minHeight;
+        var actualHeight = height - minHeight;
+        var percent = (1 - (actualHeight / range))*500;
+        $("#indicator").css("height",percent);
+        $("#position").css("background-color","");
+        console.log(percent);
+    }
+}
 
 function verify (color, message){
     $("#position").css("background-color",color).text(message);
@@ -43,23 +60,18 @@ function verify (color, message){
 function tryJump (palmPosition){
     var palmY = palmPosition[1];
     
-    if(palmY > 200 && canJump){
+    if(palmY > maxHeight && canJump){
         try {
             if(game.state.getCurrentState() !== mainState)
                 game.state.start("Game");
             mainState.jump();
             canJump = false;
-            verify("red", "Move hand down");
         } 
         catch(e) {
             
         }
     }
-    if(100 < palmY && palmY < 200){
-        verify("yellow", "Neutral Zone Hand up to start flapping");
-    }
-    if(palmY < 100){
+    if(palmY < minHeight){
         canJump = true;
-        verify("green", "Move hand up");
     }
 }
