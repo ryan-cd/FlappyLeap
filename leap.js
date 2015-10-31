@@ -41,8 +41,8 @@ Leap.loop(options, function(frame) {
 
 function indicator(height){
     if(height < minHeight){
-        $("#indicator-border").css("border-left-width", 4);
-        $("#indicator-border").css("border-right-width", 4);
+        $("#indicator-border").css("border-left-width", 10);
+        $("#indicator-border").css("border-right-width", 10);
         $("#indicator-border").css("border-left-color", "lightgreen");
         $("#indicator-border").css("border-right-color", "lightgreen");
     } else if (height > maxHeight) {
@@ -58,10 +58,6 @@ function indicator(height){
         offset = gameHeight/2;
     $("#indicator").css("height", offset);
 }
-
-function verify (color, message){
-    $("#position").css("background-color",color).text(message);
-};
 
 function tryJump (palmPosition){
     var palmY = palmPosition[1];

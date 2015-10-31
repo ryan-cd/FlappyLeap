@@ -69,7 +69,7 @@ var gameTitle = function(game){}
  
 gameTitle.prototype = {
   	create: function(){
-        this.labelScore = this.game.add.text(90, 175, "Flappy Leap!\n[FLAP to FLY]", { font: "30px Arial", fill: "#000" });
+        this.labelScore = this.game.add.text(90, 175, "Flappy Leap!\nFLAP to FLY", { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -105,8 +105,8 @@ var mainState = {
         game.physics.arcade.enable(this.bird);
         this.bird.body.gravity.y = 1000; 
 
-        // Timer that calls 'addRowOfPipes' ever 1.5 seconds
-        this.timer = this.game.time.events.loop(1500, this.addRowOfPipes, this);           
+        // Timer that calls 'addBlockColumn' ever 1.5 seconds
+        this.timer = this.game.time.events.loop(1500, this.addBlockColumn, this);           
 
         // Add a score label on the top left of the screen
         score = 0;
@@ -174,7 +174,7 @@ var mainState = {
 
     
     // Add a pipe on the screen
-    addOnePipe: function(x, y) {
+    addBlock: function(x, y) {
         // Get the first dead pipe of our group
         var pipe = this.pipes.getFirstDead();
 
@@ -191,13 +191,13 @@ var mainState = {
 
     
     // Add a row of pipes with a gap somewhere in the middle
-    addRowOfPipes: function() {
+    addBlockColumn: function() {
         canScore = true;
         var gap = Math.floor(Math.random()*7)+1;
         
         for (var i = 0; i < 10; i++)
             if (i != gap -1 && i != gap && i != gap +1) 
-                this.addOnePipe($(window).width(), i*50);   
+                this.addBlock($(window).width(), i*50);   
     },
 };
 
@@ -209,7 +209,7 @@ gameOver.prototype = {
 		this.labelScore = this.game.add.text(90, 175, 
                                              "Game Over!\n   Score: " 
                                              + score 
-                                             + "\n[FLAP to FLY]", { font: "30px Arial", fill: "#000" });
+                                             + "\nFLAP to FLY", { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
