@@ -1,3 +1,7 @@
+var score = 0;
+var canScore = false;
+var gameHeight = 500;
+
 $(window).resize(function() { 
     window.resizeGame(); 
 });
@@ -13,13 +17,12 @@ function resizeGame() {
 
     if (game.renderType === Phaser.WEBGL)
     {
-        game.renderer.resize(width, 500);
+        game.renderer.resize(width, gameHeight);
     }
 }
 
-var game = new Phaser.Game($(window).width(), 500, Phaser.AUTO, 'gameDiv');
-var score = 0;
-var canScore = false;
+var game = new Phaser.Game($(window).width(), gameHeight, Phaser.AUTO, 'gameDiv');
+
 var boot = function(game) {};
 boot.prototype = {
 	preload: function(){

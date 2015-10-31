@@ -2,23 +2,30 @@ canvas {
     margin: 0 auto;
 }
 
-#position {
+#indicator-border {
     position:absolute;
     left: 0px;
-    top: 0px;
-    width: 20px;
-    height: 500px;
+    top: 250px;
+    width: 40px;
+    height: 250px;
     z-index: 0;
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    border-top-width: 10px;
+    border-top-color: darkslateblue;
+    border-bottom-width: 10px;
+    border-bottom-color: red;
 }
 
 #indicator {
     position: absolute;
-    left:0px;
-    top:0px;
-    width:20px;
+    left: 0px;
+    top:250px;
+    width:40px;
     height:250px;
     z-index: 100;
-    border-bottom-color: black;
+    border-bottom-color: white;
     border-bottom-style: solid;
-    border-bottom-width: thick;
+    border-bottom-width: 20px;
 }

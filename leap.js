@@ -7,7 +7,7 @@ var hand;
 var canJump = true;
 var debug = false;
 var frameString = "";
-var maxHeight = 170;
+var maxHeight = 200;
 var minHeight = 100;
 // Leap.loop uses browsers requestAnimationFrame
 var options = { enableGestures: true };
@@ -41,14 +41,16 @@ Leap.loop(options, function(frame) {
 
 function indicator(height){
     if(height > maxHeight || height < minHeight){
-        $("#position").css("background-color","yellow");
-        console.log("maxed out");
+        //$("#indicator-border").css("border-left-width", 4);
+        //$("#indicator-border").css("border-right-width", 4);
+        //console.log("maxed out");
     } else {
         var range = maxHeight - minHeight;
         var actualHeight = height - minHeight;
-        var percent = (1 - (actualHeight / range))*500;
-        $("#indicator").css("height",percent);
-        $("#position").css("background-color","");
+        var percent = (1 - (actualHeight / range))*gameHeight / 2;
+        $("#indicator").css("height", percent);
+        //$("#indicator-border").css("border-left-width", 2);
+        //$("#indicator-border").css("border-right-width", 2);
         console.log(percent);
     }
 }
