@@ -69,9 +69,11 @@ var gameTitle = function(game){}
  
 gameTitle.prototype = {
   	create: function(){
-        this.labelScore = this.game.add.text(90, 175, "Flappy Leap!\n [FLAP to FLY]", { font: "30px Arial", fill: "#000" });
+        this.labelScore = this.game.add.text(90, 175, "Flappy Leap!\n[FLAP to FLY]", { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
+        var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        spaceKey.onDown.add(this.playTheGame, this);
 	},
 	playTheGame: function(){
 		this.game.state.start("Game");
@@ -210,6 +212,8 @@ gameOver.prototype = {
                                              + "\n[FLAP to FLY]", { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
+        var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        spaceKey.onDown.add(this.playTheGame, this);
 	},
 	playTheGame: function(){
 		this.game.state.start("Game");
