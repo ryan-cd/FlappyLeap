@@ -9,7 +9,6 @@ canvas {
     width: 40px;
     height: 250px;
     z-index: 0;
-    border-color: black;
     border-style: solid;
     border-width: 2px;
     border-top-width: 10px;
@@ -27,5 +26,39 @@ canvas {
     z-index: 100;
     border-bottom-color: white;
     border-bottom-style: solid;
-    border-bottom-width: 20px;
+    border-bottom-width: 15px;
+}
+
+#wing-text {
+    position: absolute;
+    left: 0px;
+    top: 200px;
+    visibility: visible;
+    font: "Arial";
+    font-size: 20;
+    font-weight: bold;
+    color: orangered;
+    visibility: visible;
+}
+
+#wing-up-text {
+    position: absolute;
+    left: 45px;
+    top: 250px;
+    visibility: visible;
+    font: "Arial";
+    font-size: 16;
+    font-weight: bold;
+    font-style: oblique;
+}
+
+#wing-down-text {
+    position: absolute;
+    left: 45px;
+    top: 480px;
+    visibility: visible;
+    font: "Arial";
+    font-size: 16;
+    font-weight: bold;
+    font-style: oblique;
 }

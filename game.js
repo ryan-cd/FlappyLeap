@@ -1,6 +1,7 @@
 var score = 0;
 var canScore = false;
 var gameHeight = 500;
+var spiral = false;
 
 $(window).resize(function() { 
     window.resizeGame(); 
@@ -18,6 +19,18 @@ function resizeGame() {
     if (game.renderType === Phaser.WEBGL)
     {
         game.renderer.resize(width, gameHeight);
+    }
+}
+
+function setCSSVisible(visible) {
+    if (visible) {
+        $("#wing-text").css("visibility", "visible");
+        $("#wing-up-text").css("visibility", "visible");
+        $("#wing-down-text").css("visibility", "visible");
+    } else {
+        $("#wing-text").css("visibility", "hidden");
+        $("#wing-up-text").css("visibility", "hidden");
+        $("#wing-down-text").css("visibility", "hidden");
     }
 }
 
@@ -69,6 +82,8 @@ gameTitle.prototype = {
 var mainState = {
     // Fuction called after 'preload' to setup the game 
     create: function() { 
+        setCSSVisible(false);
+        
         // Set the physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
         
@@ -98,13 +113,15 @@ var mainState = {
 
     // This function is called 60 times per second
     update: function() {
-        // If the bird is out of the world (too high or too low), call the 'endGame' function
+        if(!this.bird.alive) {
+            this.bird.angle += 30;
+        }
         if (this.bird.inWorld == false)
             this.endGame(); 
         // If the bird overlap any pipes, call 'endGame'
         game.physics.arcade.overlap(this.bird, this.pipes, this.collision, null, this);  
         
-        if(this.bird.angle < 20)
+        if(this.bird.angle < 20 && this.bird.alive)
             this.bird.angle += 1.5;
         
         //TODO: Refactor this 
@@ -124,7 +141,7 @@ var mainState = {
     jump: function() {
         if(!this.bird.alive)
             return;
-        this.bird.body.velocity.y = -450;
+        this.bird.body.velocity.y = -500;
         
         this.bird.anchor.setTo(-0.2, 0.5);
         game.add.tween(this.bird).to({angle: -24}, 100).start();
@@ -186,8 +203,9 @@ var mainState = {
 var gameOver = function(game){}
 gameOver.prototype = {
   	create: function(){
+        setCSSVisible(true);
 		this.labelScore = this.game.add.text(90, 175, 
-                                             "Game Over!\n Score: " 
+                                             "Game Over!\n   Score: " 
                                              + score 
                                              + "\n[FLAP to FLY]", { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);

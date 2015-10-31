@@ -7,7 +7,7 @@ var hand;
 var canJump = true;
 var debug = false;
 var frameString = "";
-var maxHeight = 200;
+var maxHeight = 160;
 var minHeight = 100;
 // Leap.loop uses browsers requestAnimationFrame
 var options = { enableGestures: true };
@@ -40,19 +40,23 @@ Leap.loop(options, function(frame) {
 });
 
 function indicator(height){
-    if(height > maxHeight || height < minHeight){
-        //$("#indicator-border").css("border-left-width", 4);
-        //$("#indicator-border").css("border-right-width", 4);
-        //console.log("maxed out");
-    } else {
-        var range = maxHeight - minHeight;
-        var actualHeight = height - minHeight;
-        var percent = (1 - (actualHeight / range))*gameHeight / 2;
-        $("#indicator").css("height", percent);
-        //$("#indicator-border").css("border-left-width", 2);
-        //$("#indicator-border").css("border-right-width", 2);
-        console.log(percent);
+    if(height < minHeight){
+        $("#indicator-border").css("border-left-width", 4);
+        $("#indicator-border").css("border-right-width", 4);
+        $("#indicator-border").css("border-left-color", "lightgreen");
+        $("#indicator-border").css("border-right-color", "lightgreen");
+    } else if (height > maxHeight) {
+        $("#indicator-border").css("border-left-width", 2);
+        $("#indicator-border").css("border-right-width", 2);
+        $("#indicator-border").css("border-left-color", "black");
+        $("#indicator-border").css("border-right-color", "black");
     }
+    var range = maxHeight - minHeight;
+    var actualHeight = height - minHeight + 20;
+    var offset = (1 - (actualHeight / range))*gameHeight / 2;
+    if(offset > gameHeight/2)
+        offset = gameHeight/2;
+    $("#indicator").css("height", offset);
 }
 
 function verify (color, message){
