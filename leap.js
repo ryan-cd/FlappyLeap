@@ -7,7 +7,7 @@ var hand;
 var canJump = true;
 var debug = false;
 var frameString = "";
-var maxHeight = 160;
+var maxHeight = 130;
 var minHeight = 100;
 // Leap.loop uses browsers requestAnimationFrame
 var options = { enableGestures: true };
