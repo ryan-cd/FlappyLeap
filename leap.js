@@ -62,6 +62,7 @@ function indicator(height){
 function tryJump (palmPosition){
     var palmY = palmPosition[1];
     
+    //flap range
     if(palmY > maxHeight && canJump){
         try {
             if(game.state.getCurrentState() !== mainState)
@@ -73,7 +74,13 @@ function tryJump (palmPosition){
             
         }
     }
-    if(palmY < minHeight){
+    //wing down range
+    if(palmY < minHeight && canJump == false){
         canJump = true;
+        try {
+            mainState.setWings('down');
+        } catch(e) {
+            //you tried to load a sprite when mainState was not active
+        }
     }
 }

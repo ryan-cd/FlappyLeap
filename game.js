@@ -1,7 +1,6 @@
 var score = 0;
 var canScore = false;
 var gameHeight = 500;
-var spiral = false;
 
 $(window).resize(function() { 
     window.resizeGame(); 
@@ -39,7 +38,7 @@ var game = new Phaser.Game($(window).width(), gameHeight, Phaser.AUTO, 'gameDiv'
 var boot = function(game) {};
 boot.prototype = {
 	preload: function(){
-          this.game.load.image("loading","assets/flappybird1.png"); 
+          this.game.load.image("loading","assets/bird1.png"); 
 	},
   	create: function(){
 
@@ -55,7 +54,8 @@ preload.prototype = {
         loadingBar.anchor.setTo(0.5,0.5);
         this.load.setPreloadSprite(loadingBar);
         game.stage.backgroundColor = '#AADDFF';
-        game.load.image('bird', 'assets/flappybird1.png');  
+        game.load.image('birdUp', 'assets/bird1.png');  
+        game.load.image('birdDown', 'assets/bird2.png');
         game.load.image('pipe', 'assets/tubes.png');
     },
   	create: function(){
@@ -70,7 +70,7 @@ var gameTitle = function(game){}
 gameTitle.prototype = {
   	create: function(){
         this.labelScore = this.game.add.text(90, 175, "Flappy Leap!\nFLAP to FLY", { font: "30px Arial", fill: "#000" });
-		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
+		var playButton = this.game.add.button(160,320,"birdDown",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(this.playTheGame, this);
@@ -99,7 +99,7 @@ var mainState = {
         this.pipes.createMultiple(100, 'pipe');  
         
         // Display the bird on the screen
-        this.bird = this.game.add.sprite(100, 245, 'bird');
+        this.bird = this.game.add.sprite(100, 245, 'birdUp');
         
         // Add gravity to the bird to make it fall
         game.physics.arcade.enable(this.bird);
@@ -143,12 +143,20 @@ var mainState = {
     jump: function() {
         if(!this.bird.alive)
             return;
+        
+        this.setWings('up');
         this.bird.body.velocity.y = -500;
         
         this.bird.anchor.setTo(-0.2, 0.5);
         game.add.tween(this.bird).to({angle: -24}, 100).start();
     },
     
+    setWings: function(state) {
+        if (state === 'up')
+            this.bird.loadTexture('birdUp', 0);
+        else 
+            this.bird.loadTexture('birdDown', 0);
+    },
     
     collision: function() {
         if(!this.bird.alive) 
@@ -210,7 +218,7 @@ gameOver.prototype = {
                                              "Game Over!\n   Score: " 
                                              + score 
                                              + "\nFLAP to FLY", { font: "30px Arial", fill: "#000" });
-		var playButton = this.game.add.button(160,320,"bird",this.playTheGame,this);
+		var playButton = this.game.add.button(160,320,"birdDown",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(this.playTheGame, this);
