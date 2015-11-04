@@ -33,30 +33,35 @@ function setCSSVisible(visible) {
     }
 }
 
+function drawBackground() {
+    var myBitmap = game.add.bitmapData($(window).width(), gameHeight);
+
+    var grd=myBitmap.context.createLinearGradient(0,0,0,gameHeight);
+    grd.addColorStop(0,"#65c3fe");
+    grd.addColorStop(1,"#65d7fe");
+    myBitmap.context.fillStyle=grd;
+    myBitmap.context.fillRect(0,0,$(window).width(), gameHeight);
+    
+    game.add.sprite(0, 0, myBitmap);
+}
+
 var game = new Phaser.Game($(window).width(), gameHeight, Phaser.AUTO, 'gameDiv');
 
-var boot = function(game) {};
-boot.prototype = {
-	preload: function(){
-          this.game.load.image("loading","assets/bird1.png"); 
-	},
-  	create: function(){
-
-		this.game.state.start("Preload");
-	}
-};
 
 var preload = function(game){};
  
 preload.prototype = {
     preload: function() { 
+        game.load.image("loading","assets/bird1.png");
         var loadingBar = this.add.sprite(160,240,"loading");
         loadingBar.anchor.setTo(0.5,0.5);
         this.load.setPreloadSprite(loadingBar);
         game.stage.backgroundColor = '#AADDFF';
         game.load.image('birdUp', 'assets/bird1.png');  
         game.load.image('birdDown', 'assets/bird2.png');
-        game.load.image('pipe', 'assets/tubes.png');
+        game.load.image('pipeMid', 'assets/pipemid.png');
+        game.load.image('pipeTop', 'assets/pipetop.png');
+        game.load.image('mountains', 'assets/mountains.png')
     },
   	create: function(){
 		this.game.state.start("GameTitle");
@@ -69,9 +74,10 @@ var gameTitle = function(game){}
  
 gameTitle.prototype = {
   	create: function(){
+        drawBackground();
         this.labelScore = this.game.add.text(90, 175, "Flappy Leap!\nFLAP to FLY", { font: "30px Arial", fill: "#000" });
 		var playButton = this.game.add.button(160,320,"birdDown",this.playTheGame,this);
-		playButton.anchor.setTo(0.5,0.5);
+		playButton.anchor.setTo(1,1);
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(this.playTheGame, this);
 	},
@@ -84,8 +90,14 @@ gameTitle.prototype = {
 var mainState = {
     // Fuction called after 'preload' to setup the game 
     create: function() { 
+        drawBackground();
         setCSSVisible(false);
         
+        this.mountains = this.game.add.sprite(0, gameHeight, 'mountains');
+        this.mountains.anchor.setTo(0,1);
+        game.physics.arcade.enable(this.mountains);
+        
+        this.mountains.body.velocity.x = -10;
         // Set the physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
         
@@ -93,10 +105,9 @@ var mainState = {
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(this.jump, this); 
 
-        // Create a group of 20 pipes
         this.pipes = game.add.group();
         this.pipes.enableBody = true;
-        this.pipes.createMultiple(100, 'pipe');  
+        this.pipes.createMultiple(100, 'pipeMid');  
         
         // Display the bird on the screen
         this.bird = this.game.add.sprite(100, 245, 'birdUp');
@@ -118,6 +129,7 @@ var mainState = {
         if(!this.bird.alive) {
             this.bird.angle += 30;
         }
+        
         if (this.bird.inWorld == false)
             this.endGame(); 
         // If the bird overlap any pipes, call 'endGame'
@@ -135,7 +147,7 @@ var mainState = {
         }, this);
         
         this.labelScore.text = score;  
-            
+        
     },
 
     
@@ -146,6 +158,7 @@ var mainState = {
         
         this.setWings('up');
         this.bird.body.velocity.y = -500;
+        
         
         this.bird.anchor.setTo(-0.2, 0.5);
         game.add.tween(this.bird).to({angle: -24}, 100).start();
@@ -168,6 +181,7 @@ var mainState = {
         
         game.time.events.remove(this.timer);
         
+        this.mountains.body.velocity.x = 0;
         this.pipes.forEachAlive(function(p){
             p.body.velocity.x = 0;
         }, this);
@@ -213,6 +227,7 @@ var mainState = {
 var gameOver = function(game){}
 gameOver.prototype = {
   	create: function(){
+        drawBackground();
         setCSSVisible(true);
 		this.labelScore = this.game.add.text(90, 175, 
                                              "Game Over!\n   Score: " 
@@ -228,9 +243,8 @@ gameOver.prototype = {
 	}
 }
 
-game.state.add('Boot', boot);
 game.state.add('Preload', preload);
 game.state.add('GameTitle', gameTitle);
 game.state.add('Game', mainState); 
 game.state.add('GameOver', gameOver);
-game.state.start('Boot'); 
+game.state.start('Preload'); 
