@@ -48,6 +48,11 @@ function drawBackground() {
     
     game.add.sprite(0, 0, myBitmap);
     
+    floatingislands = this.game.add.sprite($(window).width(), Math.random()*(gameHeight - 60), 'floatingisland');
+    floatingislands.anchor.setTo(0,1);
+    game.physics.arcade.enable(floatingislands);
+    floatingislands.body.velocity.x = -5;
+    
     mountains = this.game.add.sprite($(window).width() - 200, gameHeight, 'mountains');
     mountains.anchor.setTo(0,1);
     game.physics.arcade.enable(mountains);
@@ -61,12 +66,7 @@ function drawBackground() {
     cloud2 = this.game.add.sprite($(window).width(), Math.random()*gameHeight, 'cloud2');
     cloud2.anchor.setTo(0,1);
     game.physics.arcade.enable(cloud2);
-    cloud2.body.velocity.x = -100;
-        
-    floatingislands = this.game.add.sprite($(window).width(), Math.random()*gameHeight, 'floatingisland');
-    floatingislands.anchor.setTo(0,1);
-    game.physics.arcade.enable(floatingislands);
-    floatingislands.body.velocity.x = -20;
+    cloud2.body.velocity.x = -70;
 }
 
 var game = new Phaser.Game($(window).width(), gameHeight, Phaser.AUTO, 'gameDiv');
