@@ -52,7 +52,7 @@ function indicator(height){
         $("#indicator-border").css("border-right-color", "black");
     }
     var range = maxHeight - minHeight;
-    var actualHeight = height - minHeight + 20;
+    var actualHeight = height - minHeight;
     var offset = (1 - (actualHeight / range))*gameHeight / 2;
     if(offset > gameHeight/2)
         offset = gameHeight/2;

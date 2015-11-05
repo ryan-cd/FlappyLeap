@@ -1,6 +1,9 @@
 var score = 0;
 var canScore = false;
 var gameHeight = 500;
+var mountains;
+var cloud1;
+var cloud2;
 
 $(window).resize(function() { 
     window.resizeGame(); 
@@ -19,6 +22,7 @@ function resizeGame() {
     {
         game.renderer.resize(width, gameHeight);
     }
+    this.game.state.start(mainState);
 }
 
 function setCSSVisible(visible) {
@@ -43,6 +47,26 @@ function drawBackground() {
     myBitmap.context.fillRect(0,0,$(window).width(), gameHeight);
     
     game.add.sprite(0, 0, myBitmap);
+    
+    mountains = this.game.add.sprite($(window).width() - 200, gameHeight, 'mountains');
+    mountains.anchor.setTo(0,1);
+    game.physics.arcade.enable(mountains);
+    mountains.body.velocity.x = -10;
+        
+    cloud1 = this.game.add.sprite($(window).width(), Math.random()*gameHeight, 'cloud1');
+    cloud1.anchor.setTo(0,1);
+    game.physics.arcade.enable(cloud1);
+    cloud1.body.velocity.x = -60;
+        
+    cloud2 = this.game.add.sprite($(window).width(), Math.random()*gameHeight, 'cloud2');
+    cloud2.anchor.setTo(0,1);
+    game.physics.arcade.enable(cloud2);
+    cloud2.body.velocity.x = -100;
+        
+    floatingislands = this.game.add.sprite($(window).width(), Math.random()*gameHeight, 'floatingisland');
+    floatingislands.anchor.setTo(0,1);
+    game.physics.arcade.enable(floatingislands);
+    floatingislands.body.velocity.x = -20;
 }
 
 var game = new Phaser.Game($(window).width(), gameHeight, Phaser.AUTO, 'gameDiv');
@@ -61,7 +85,10 @@ preload.prototype = {
         game.load.image('birdDown', 'assets/bird2.png');
         game.load.image('pipeMid', 'assets/pipemid.png');
         game.load.image('pipeTop', 'assets/pipetop.png');
-        game.load.image('mountains', 'assets/mountains.png')
+        game.load.image('cloud1', 'assets/clouds1.png');
+        game.load.image('cloud2', 'assets/clouds2.png');
+        game.load.image('floatingisland', 'assets/floatingisland.png');
+        game.load.image('mountains', 'assets/mountains.png');
     },
   	create: function(){
 		this.game.state.start("GameTitle");
@@ -75,7 +102,7 @@ var gameTitle = function(game){}
 gameTitle.prototype = {
   	create: function(){
         drawBackground();
-        this.labelScore = this.game.add.text(90, 175, "Flappy Leap!\nFLAP to FLY", { font: "30px Arial", fill: "#000" });
+        this.labelScore = this.game.add.text(90, 175, "Flappy Leap!\nFLAP to FLY", { font: "30px Arial", fill: "#333" });
 		var playButton = this.game.add.button(160,320,"birdDown",this.playTheGame,this);
 		playButton.anchor.setTo(1,1);
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -93,11 +120,6 @@ var mainState = {
         drawBackground();
         setCSSVisible(false);
         
-        this.mountains = this.game.add.sprite(0, gameHeight, 'mountains');
-        this.mountains.anchor.setTo(0,1);
-        game.physics.arcade.enable(this.mountains);
-        
-        this.mountains.body.velocity.x = -10;
         // Set the physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
         
@@ -121,7 +143,7 @@ var mainState = {
 
         // Add a score label on the top left of the screen
         score = 0;
-        this.labelScore = this.game.add.text(20, 20, "0", { font: "30px Arial", fill: "#000" });  
+        this.labelScore = this.game.add.text(20, 20, "0", { font: "30px Arial", fill: "#333" });  
     },
 
     // This function is called 60 times per second
@@ -148,6 +170,14 @@ var mainState = {
         
         this.labelScore.text = score;  
         
+        if(mountains.position.x < 0 - mountains.width)
+            mountains.position.x = $(window).width();
+        if(floatingislands.position.x < 0 - floatingislands.width)
+            floatingislands.position.x = $(window).width();
+        if(cloud1.position.x < 0 - cloud1.width)
+            cloud1.position.x = $(window).width();
+        if(cloud2.position.x < 0 - cloud2.width)
+            cloud2.position.x = $(window).width();
     },
 
     
@@ -180,8 +210,6 @@ var mainState = {
         this.bird.body.gravity.y = 2000;
         
         game.time.events.remove(this.timer);
-        
-        this.mountains.body.velocity.x = 0;
         this.pipes.forEachAlive(function(p){
             p.body.velocity.x = 0;
         }, this);
@@ -228,11 +256,12 @@ var gameOver = function(game){}
 gameOver.prototype = {
   	create: function(){
         drawBackground();
+        mountains.body.velocity.x = 0;
         setCSSVisible(true);
 		this.labelScore = this.game.add.text(90, 175, 
                                              "Game Over!\n   Score: " 
                                              + score 
-                                             + "\nFLAP to FLY", { font: "30px Arial", fill: "#000" });
+                                             + "\nFLAP to FLY", { font: "30px Arial", fill: "#333" });
 		var playButton = this.game.add.button(160,320,"birdDown",this.playTheGame,this);
 		playButton.anchor.setTo(0.5,0.5);
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
