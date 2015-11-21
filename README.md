@@ -1,7 +1,8 @@
 # Flappy Leap
 Become the flappy bird! Flap your hand above your Leap Motion device to fly.
 
-This project was made as an entry for the Leap Motion 3D Jam 2015 competition. It is available for download on itch.io here: [Flappy Leap](http://s7aesis.itch.io/flappyleap)
+This project was made as an entry for the Leap Motion 3D Jam 2015 competition. It is available for download on itch.io here: [Flappy Leap](http://s7aesis.itch.io/flappyleap), 
+or you can play it in your browser [here!](http://s7aesis.github.io/FlappyLeap/)
 
 Gameplay
 ---

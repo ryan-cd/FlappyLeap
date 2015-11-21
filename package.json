@@ -1,5 +1,5 @@
 {
-  "name"    : "your-app",
-  "version" : "0.1.0",
+  "name"    : "Flappy Leap!",
+  "version" : "1.0.0",
   "main"    : "main.js"
 }
